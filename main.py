@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from mangum import Mangum
+from passlib.hash import md5_crypt
 app = FastAPI()
 
 
@@ -19,7 +20,7 @@ fake_user_db={
         "username":"nikhil",
         "full_name":"nikhil patil",
         "email":"n@t.com",
-        "hashed_password":"$2b$12$L3WxhmOZ2QMVwQbwJ/an1OsCot2s1m6hFrHowEAGrsnOAZvnDuplC",
+        "hashed_password":"$1$aRJe40kX$6PFkP2xDnkDuh2mpOb./n.",
         "disabled":False,
     }
 }
@@ -46,10 +47,10 @@ def get_user(db , username: str):
         return UserInDB(**user_dict)
 
 def verify_password(password: str , hashed_password: str):
-    return pwd_context.verify(password, hashed_password)
+    return md5_crypt.verify(password, hashed_password)
 
 def get_password_hash(password):
-    return pwd_context.hash(password)
+    return md5_crypt.hash(password)
 
 
 def authenticate_user(fake_db, username:str, password:str):
