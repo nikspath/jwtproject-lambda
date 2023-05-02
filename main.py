@@ -4,6 +4,7 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
+from mangum import Mangum
 app = FastAPI()
 
 
@@ -119,3 +120,6 @@ async def read_users_me(current_user : User = Depends(get_current_active_user)):
 
 # pwt=get_password_hash("test")
 # print(pwt)
+
+handler = Mangum(app)
+
